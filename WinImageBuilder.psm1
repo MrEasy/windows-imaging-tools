@@ -1202,8 +1202,10 @@ function Wait-ForVMShutdown {
         $vmState = (Get-VM -Name $Name).State
         $isOff =  $vmState -eq "Off"
         try {
-            if ($vmState -ne "Running" -or `
-                !(Get-VMIntegrationService $Name -Name "Key-Value Pair Exchange").Enabled) {
+            if ($vmState -ne "Running") {
+                # https://github.com/cloudbase/windows-imaging-tools/issues/352
+                # if ($vmState -ne "Running" -or `
+                #     !(Get-VMIntegrationService $Name -Name "Key-Value Pair Exchange").Enabled) {
                 continue
             }
             $currentVMMessages = Get-KVPData -VMName $Name
